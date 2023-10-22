@@ -1,4 +1,3 @@
-import UpperMenu from "./Component/UpperMenu";
 import TypingBox from "./Component/TypingBox";
 import { GlobalStyles } from "./Styles/global";
 
@@ -6,11 +5,11 @@ function App() {
 
 
   return (
-    <div className="App">
-      <GlobalStyles/>
-      <UpperMenu/>
+    <div className="canvas">
+      <GlobalStyles />
+      <div>Header</div>
       <TypingBox/>
-      Hello
+      <div>footer</div>
     </div>
   );
 }

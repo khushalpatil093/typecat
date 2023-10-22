@@ -1,26 +1,27 @@
-import React, {createRef, useEffect, useMemo, useRef, useState} from "react";
+import React, {useEffect, useState, useRef, useMemo, createRef} from "react"
+import { generate } from "random-words";
 import UpperMenu from "./UpperMenu";
 import { useTestMode } from "../Context/TestModeContext";
 
-var randomwords = require('random-words');
 
 const TypingBox = () => {
-    const inputRef = useRef(null);
+
     const {testTime} = useTestMode();
     const [countDown, setCountDown] = useState(testTime);
     const [intervalId, setIntervalId] = useState(null);
     const [testStart, setTestStart] = useState(false);
     const [testEnd, setTestEnd] = useState(false);
-    const [wordsArray, setWordsArray] = useState(() => {
-        return randomwords(50);
+    const inputRef = useRef(null);
+    const [wordsArray, setWordsArray] = useState(()=> {
+        return generate(50);
     });
 
-    const [currWordIndex, setCurrWordIndex] = useState(0);
-    const [currCharIndex, setCurrCharIndex] = useState(0);
+    const [currentWordIndex, setCurrentwordIndex] = useState(0);
+    const [currentCharIndex, setCurrentCharIndex] = useState(0);
 
-    const wordsSpanRef = useMemo(() => {
-        return Array(wordsArray.length).fill(0).map(i => createRef(null))
-    }, [wordsArray]);
+    const wordsSpanRef = useMemo(()=> {
+        return Array(wordsArray.length).fill(0).map(i=> createRef(null));
+    },[wordsArray])
 
     const startTimer = () => {
         const interValId = setInterval(timer, 1000);
@@ -42,11 +43,11 @@ const TypingBox = () => {
     const resetTest = ()=> {
         clearInterval(intervalId);
         setCountDown(testTime);
-        setCurrWordIndex(0);
-        setCurrCharIndex(0);
+        setCurrentwordIndex(0);
+        setCurrentCharIndex(0);
         setTestStart(false);
         setTestEnd(false);
-        setWordsArray(randomwords(50));
+        setWordsArray(generate(50));
         resetWordSpanRefClassname();
         focusInput();
     }
@@ -61,80 +62,82 @@ const TypingBox = () => {
     }
 
     const handleUserInput = (e) => {
+
         if(!testStart) {
             startTimer();
             setTestStart(true);
         }
 
-        const allCurrChars = wordsSpanRef[currWordIndex].current.childNodes;
+        const allCurrentChars = wordsSpanRef[currentWordIndex].current.childNodes;
 
-        if(e.keycode === 32){
-            if(allCurrChars.length<=currCharIndex){
-                allCurrChars[currCharIndex-1].classList.remove('current-right');
-            }
-            else{
-                allCurrChars[currCharIndex].classList.remove('current');
+        if(e.keyCode === 32){
+
+            if(allCurrentChars.length<=currentCharIndex){
+                allCurrentChars[currentCharIndex-1].classList.remove('current-right');
+            } else {
+                allCurrentChars[currentCharIndex].classList.remove('current');
             }
 
-            wordsSpanRef[currWordIndex+1].current.childNodes[0].className = 'current';
-            setCurrWordIndex(currWordIndex+1);
-            setCurrCharIndex(0);
+            wordsSpanRef[currentWordIndex+1].current.childNodes[0].className = 'current';
+            setCurrentwordIndex(currentWordIndex+1);
+            setCurrentCharIndex(0);
             return;
         }
 
-        if(e.keycode === 8){
+        if(e.keyCode === 8){
+           
+           if(currentCharIndex !== 0){
 
-            if(currCharIndex !== 0){
-                if(allCurrChars.length === currCharIndex){
-                    if(allCurrChars[currCharIndex-1].className.includes('extra')){
-                        allCurrChars[currCharIndex-1].remove();
-                        allCurrChars[currCharIndex-2].className+='current-right';
-                    }
-                    else{
-                        allCurrChars[currCharIndex-1].className = 'current';
-                    }
-                    setCurrCharIndex(currCharIndex-1);
-                    return;
+            if(allCurrentChars.length === currentCharIndex){
+
+                if(allCurrentChars[currentCharIndex-1].className.includes('extra')){
+                    allCurrentChars[currentCharIndex-1].remove();
+                    allCurrentChars[currentCharIndex-2].className += ' current-right';
                 }
-
-                allCurrChars[currCharIndex].className = '';
-                allCurrChars[currCharIndex-1].className = 'current';
-                setCurrCharIndex(currCharIndex-1);
+                else {
+                    allCurrentChars[currentCharIndex-1].className = 'current';
+                }
+                
+                setCurrentCharIndex(currentCharIndex-1);
+                return;            
             }
+
+            allCurrentChars[currentCharIndex].className = '';
+            allCurrentChars[currentCharIndex-1].className = 'current';
+            setCurrentCharIndex(currentCharIndex-1);
+           }
 
             return;
         }
 
-        if(currCharIndex === allCurrChars.length){
+        if(currentCharIndex === allCurrentChars.length){
             let newSpan = document.createElement('span');
             newSpan.innerText = e.key;
-            newSpan.className = 'incorrect extra  current-right';
-            allCurrChars[currCharIndex-1].classList.remove('current-right');
-            wordsSpanRef[currWordIndex].current.append(newSpan);
-            setCurrCharIndex(currCharIndex+1);
+            newSpan.className = 'incorrect extra current-right';
+            allCurrentChars[currentCharIndex-1].classList.remove('current-right');
+            wordsSpanRef[currentWordIndex].current.append(newSpan);
+            setCurrentCharIndex(currentCharIndex+1);
             return;
 
         }
 
-        if(e.key === allCurrChars[currCharIndex].innerText){
-            allCurrChars[currCharIndex].className = 'correct';
-        }
-        else{
-            allCurrChars[currCharIndex].className = 'incorrect';
-        }
-
-        if(currCharIndex+1 === allCurrChars.length){
-            allCurrChars[currCharIndex].className += 'current-right';
-        }
-        else{
-            allCurrChars[currCharIndex+1].className = 'current';
+        if(e.key === allCurrentChars[currentCharIndex].innerText){
+            allCurrentChars[currentCharIndex].className = 'correct';
+        } else {
+            allCurrentChars[currentCharIndex].className = 'incorrect';
         }
 
-        setCurrCharIndex(currCharIndex+1);
+        if(currentCharIndex+1 === allCurrentChars.length){
+            allCurrentChars[currentCharIndex].className += ' current-right';    
+        } else {
+            allCurrentChars[currentCharIndex+1].className = 'current';
+        }
+
+        setCurrentCharIndex(currentCharIndex+1);
 
     }
 
-    const focusInput= () => {
+    const focusInput =() => {
         inputRef.current.focus();
     }
 
@@ -142,28 +145,31 @@ const TypingBox = () => {
         resetTest();
     }, [testTime])
 
-    useEffect(() => {
+    useEffect(()=>{
         focusInput();
         wordsSpanRef[0].current.childNodes[0].className = 'current';
     },[])
 
-    return (
+    return(
         <div>
             <UpperMenu countDown={countDown} />
-            {(testEnd) ? (<h1>Test Over</h1>): (<div className="type-Box" onClick={focusInput}>
+            { (testEnd) ? (<h1>Test Over</h1>): (<div className="type-Box" onClick={focusInput}>
+            <div className="type-box" onClick={focusInput}>
                 <div className="words">
                     {
-                        wordsArray.map((word, index) => (
+                        wordsArray.map((word, index)=> (
                             <span className="word" ref={wordsSpanRef[index]}>
-                                {
-                                    word.split('').map(char=>(
-                                        <span>{char}</span>
-                                    ))
-                                }
+                                {word.split('').map((char, index) => (
+                                    <span key={index}>
+                                        {char}
+                                    </span>
+                                ))}
                             </span>
                         ))
                     }
                 </div>
+            </div>
+
             </div>)}
             <input
                 type="text"
@@ -173,7 +179,6 @@ const TypingBox = () => {
             />
         </div>
     )
-
 }
 
 export default TypingBox;
