@@ -1,17 +1,23 @@
-import React, {useEffect, useState, useRef, useMemo, createRef} from "react"
+import React, { useEffect, useRef, useMemo, createRef, useState } from "react";
 import { generate } from "random-words";
 import UpperMenu from "./UpperMenu";
 import { useTestMode } from "../Context/TestModeContext";
 
 
-const TypingBox = () => {
 
+const TypingBox = () => {
+    
+    const inputRef = useRef(null);
     const {testTime} = useTestMode();
     const [countDown, setCountDown] = useState(testTime);
     const [intervalId, setIntervalId] = useState(null);
     const [testStart, setTestStart] = useState(false);
     const [testEnd, setTestEnd] = useState(false);
-    const inputRef = useRef(null);
+    const [correctChars, setCorrectChars] = useState(0);
+    const [incorrectChars, setIncorrectChars] = useState(0);
+    const [missedChars, setMissedChars] = useState(0);
+    const [extraChars, setExtraChars] = useState(0);
+    const [correctWords, setCorrectWords] = useState(0);
     const [wordsArray, setWordsArray] = useState(()=> {
         return generate(50);
     });
@@ -54,8 +60,9 @@ const TypingBox = () => {
 
     const resetWordSpanRefClassname = () => {
         wordsSpanRef.map(i => {
-            Array.from(i.current.childNodes).map(j => {
+            return Array.from(i.current.childNodes).map(j => {
                 j.className = '';
+                return j;
             })
         });
         wordsSpanRef[0].current.childNodes[0].className = 'current';
@@ -72,9 +79,16 @@ const TypingBox = () => {
 
         if(e.keyCode === 32){
 
+            let correctCharsInWords = wordsSpanRef[currentWordIndex].current.querySelectorAll('.correct');
+
+            if(correctCharsInWords.length === allCurrentChars.length){
+                setCorrectWords(correctWords+1);
+            }
+
             if(allCurrentChars.length<=currentCharIndex){
                 allCurrentChars[currentCharIndex-1].classList.remove('current-right');
             } else {
+                setMissedChars(missedChars + (allCurrentChars.length - currentCharIndex));
                 allCurrentChars[currentCharIndex].classList.remove('current');
             }
 
@@ -117,14 +131,17 @@ const TypingBox = () => {
             allCurrentChars[currentCharIndex-1].classList.remove('current-right');
             wordsSpanRef[currentWordIndex].current.append(newSpan);
             setCurrentCharIndex(currentCharIndex+1);
+            setExtraChars(extraChars+1);
             return;
 
         }
 
         if(e.key === allCurrentChars[currentCharIndex].innerText){
             allCurrentChars[currentCharIndex].className = 'correct';
+            setCorrectChars(correctChars+1);
         } else {
             allCurrentChars[currentCharIndex].className = 'incorrect';
+            setIncorrectChars(incorrectChars+1);
         }
 
         if(currentCharIndex+1 === allCurrentChars.length){
@@ -137,18 +154,26 @@ const TypingBox = () => {
 
     }
 
+    const calculateWPM = () => {
+        return Math.round((correctChars/5)/(testTime/60));
+    }
+
+    const calculateAccuracy = () => {
+        return Math.round((correctWords/currentWordIndex)*100)
+    }
+
     const focusInput =() => {
         inputRef.current.focus();
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         resetTest();
-    }, [testTime])
+    }, [testTime]);
 
     useEffect(()=>{
         focusInput();
         wordsSpanRef[0].current.childNodes[0].className = 'current';
-    },[])
+    }, [wordsSpanRef]);
 
     return(
         <div>
@@ -177,6 +202,8 @@ const TypingBox = () => {
                 ref={inputRef}
                 onKeyDown={handleUserInput}
             />
+            <br/>
+            <button className="ResetBtn" onClick={resetTest}>Reset</button>
         </div>
     )
 }
