@@ -137,4 +137,29 @@ body{
     justify-content: space-between;
 }
 
+.stats-box{
+    display: flex;
+    width: 1000px;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.left-stats{
+    width: 30%;
+    padding: 30px;
+}
+
+.right-stats{
+    width: 70%;
+}
+
+.title{
+    font-size: 20px;
+}
+
+.subtitle{
+    font-size: 30px;
+}
+
 `

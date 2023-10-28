@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useMemo, createRef, useState } from "react";
 import { generate } from "random-words";
 import UpperMenu from "./UpperMenu";
 import { useTestMode } from "../Context/TestModeContext";
+import Stats from "./Stats";
 
 
 
@@ -22,6 +23,7 @@ const TypingBox = () => {
         return generate(50);
     });
 
+    const [graphData, setGraphData] = useState([]);
     const [currentWordIndex, setCurrentwordIndex] = useState(0);
     const [currentCharIndex, setCurrentCharIndex] = useState(0);
 
@@ -34,6 +36,16 @@ const TypingBox = () => {
         setIntervalId(intervalId);
         function timer() {
             setCountDown((latestCountDown)=>{
+
+                setCorrectChars((correctChars) => {
+                    setGraphData((graphData) => {
+                        return [...graphData, [ 
+                            testTime.latestCountDown + 1,
+                            [correctChars/5]/((testTime-latestCountDown+1)/60)
+                        ]];
+                    })
+                    return correctChars;
+                })
 
                 if(latestCountDown === 1){
                     setTestEnd(true);
@@ -159,7 +171,7 @@ const TypingBox = () => {
     }
 
     const calculateAccuracy = () => {
-        return Math.round((correctWords/currentWordIndex)*100)
+        return Math.round((correctWords/currentWordIndex)*100);
     }
 
     const focusInput =() => {
@@ -178,7 +190,17 @@ const TypingBox = () => {
     return(
         <div>
             <UpperMenu countDown={countDown} />
-            { (testEnd) ? (<h1>Test Over</h1>): (<div className="type-Box" onClick={focusInput}>
+            { (testEnd) ? (
+            <Stats
+                wpm={calculateWPM()}
+                accuracy={calculateAccuracy()} 
+                correctChars={correctChars}
+                incorrectChars={incorrectChars}
+                missedChars={missedChars}
+                extraChars={extraChars}
+                graphData={graphData}
+            />
+            ): (<div className="type-Box" onClick={focusInput}>
             <div className="type-box" onClick={focusInput}>
                 <div className="words">
                     {
