@@ -4,7 +4,7 @@ import { auth } from "../firebaseConfig";
 import { toast } from "react-toastify";
 import errorMapping from "../Utils/errorMapping";
 
-const LoginForm = () => {
+const LoginForm = ({handleModalClose}) => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -12,7 +12,7 @@ const LoginForm = () => {
     const handleSubmit = () => {
         if(!email || !password){
             toast.warn('Fill all details', {
-                position: "top-right",
+                position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -26,7 +26,7 @@ const LoginForm = () => {
 
         auth.signInWithEmailAndPassword(email, password).then((res) => {
             toast.success('logged in', {
-                position: "top-right",
+                position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -35,9 +35,10 @@ const LoginForm = () => {
                 progress: undefined,
                 theme: "light",
                 });
+                handleModalClose();
         }).catch((err) => {
             toast.error(errorMapping[err.code] || 'some error occured', {
-                position: "top-right",
+                position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,

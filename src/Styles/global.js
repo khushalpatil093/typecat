@@ -162,4 +162,56 @@ body{
     font-size: 30px;
 }
 
+.user-profile{
+    width: 80vw;
+    margin: auto;
+    display: flex;
+    height: 40vh;
+    background: ;
+    border-radius: 20px;
+    padding: 1rem;
+    justify-content: center;
+    align-text: center;
+}
+.user{
+    width: 50%;
+    display: flex;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    padding: 1rem;
+    border-right: 2px solid;
+}
+
+.info{
+    width: 50%;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+.picture{
+    width: 30%;
+}
+
+.total-tests{
+    width: 50%;
+    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.table{
+    margin: auto;
+    width: 80vw;
+}
+.graph-user-page{
+    margin: auto;
+    width: 80vw;
+}
+.center-of-screen{
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
 `

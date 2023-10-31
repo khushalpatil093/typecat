@@ -4,7 +4,7 @@ import { auth } from '../firebaseConfig'
 import { toast } from "react-toastify";
 import errorMapping from "../Utils/errorMapping";
 
-const SignupForm = () => {
+const SignupForm = ({handleModalClose}) => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -13,7 +13,7 @@ const SignupForm = () => {
     const handleSubmit = () => {
         if(!email || !password || !confirmPassword){
             toast.warn('Fill all details', {
-                position: "top-right",
+                position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -26,7 +26,7 @@ const SignupForm = () => {
         }
         if(password !== confirmPassword){
             toast.warn('Password Mismatch', {
-                position: "top-right",
+                position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -40,7 +40,7 @@ const SignupForm = () => {
 
         auth.createUserWithEmailAndPassword(email, password).then((res) => {
             toast.success('User created', {
-                position: "top-right",
+                position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -49,9 +49,10 @@ const SignupForm = () => {
                 progress: undefined,
                 theme: "light",
                 });
+                handleModalClose()
         }).catch((err)=> {
             toast.error(errorMapping[err.code] || 'some error occured', {
-                position: "top-right",
+                position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,

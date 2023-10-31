@@ -9,18 +9,25 @@ import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 import { toast } from "react-toastify";
 import errorMapping from "../Utils/errorMapping";
 import { auth } from "../firebaseConfig";
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useNavigate } from "react-router-dom";
+
 
 const AccountCircle = () => {
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(0);
 
+    const navigate = useNavigate();
+    const [user] = useAuthState(auth);
+
     const googleProvider = new GoogleAuthProvider();
 
     const handleGoogleSignIn = () => {
         signInWithPopup(auth, googleProvider).then((res) => {
             toast.success('Google login successful', {
-                position: "top-right",
+                position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -29,9 +36,10 @@ const AccountCircle = () => {
                 progress: undefined,
                 theme: "light",
                 });
+                handleModalClose();
         }).catch((err) => {
             toast.error(errorMapping[err.code] || 'some error occured', {
-                position: "top-right",
+                position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -44,7 +52,12 @@ const AccountCircle = () => {
     }
 
     const handleModalOpen = () => {
-        setOpen(true);
+        if(user){
+            navigate('/user');
+        }
+        else{
+            setOpen(true);
+        }
     }
 
     const handleModalClose = () => {
@@ -55,12 +68,38 @@ const AccountCircle = () => {
         setValue(v)
     }
 
+    const logout = () => {
+        auth.signOut().then((res) => {
+            toast.success('Logged out', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                });
+        }).catch((err) => {
+            toast.error('not able to logout', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                });
+        })
+    }
+
     return (
         <div>
             <AccountCircleIcon
                 onClick={handleModalOpen}
             />
-
+            {user && <LogoutIcon onClick={logout} />}
             <Modal
                 open={open}
                 onClose={handleModalClose}
@@ -81,8 +120,8 @@ const AccountCircle = () => {
                             <Tab style={{color: '#F5DCB6'}} label='signup'></Tab>
                         </Tabs>
                     </AppBar>
-                    {value === 0 && <LoginForm/>}
-                    {value === 1 && <SignupForm/>}
+                    {value === 0 && <LoginForm handleModalClose={handleModalClose} />}
+                    {value === 1 && <SignupForm handleModalClose={handleModalClose} />}
                     <Box
                         style={{
                             background: '#081426'
