@@ -8,7 +8,7 @@ const Header = () => {
             <div className="logo">
                 <KeyboardIcon/>
                 <div>
-                    <h2>typecat</h2>
+                    <span className="headName">typecat</span>
                 </div>
             </div>
             <div className="user-icon">
