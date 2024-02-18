@@ -1,5 +1,5 @@
 import React from "react";
-import GitHubIcon from '@material-ui/icons/GitHub';
+import GitHubIcon from '@mui/icons-material/GitHub';
 // import Select from 'react-select';
 // import { themeOptions } from "../Utils/themeOptions";
 // import { useTheme } from "../Context/ThemeContext";
