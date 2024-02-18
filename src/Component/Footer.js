@@ -11,7 +11,7 @@ const Footer = () => {
     return (
         <div className="footer">
             <div className="links">
-                <a href="https://github.com/khushalpatil093/typecat"><GitHubIcon/></a>
+                <GitHubIcon/>
             </div>
         
         </div>
