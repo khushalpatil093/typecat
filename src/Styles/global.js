@@ -136,9 +136,12 @@ body{
     margin-left: auto;
     justify-content: space-between;
 }
+.logo {
+    display: flex;
+}
 .headName{
-    font-size: 2rem;
-    font-weight: 600;
+    font-size: 3rem;
+    font-weight: 800;
 }
 
 .stats-box{
