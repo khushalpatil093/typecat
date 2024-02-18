@@ -138,9 +138,11 @@ body{
 }
 .logo {
     display: flex;
+    justify-content: center;
+    align-item: center;
 }
 .headName{
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: 800;
 }
 
