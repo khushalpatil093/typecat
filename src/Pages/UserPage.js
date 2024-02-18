@@ -40,7 +40,7 @@ const UserPage = () => {
         if(!loading && !user){
             navigate('/');
         }
-    }, [loading])
+    }, [loading, navigate, user])
 
     if(loading || dataLoading){
         return <div className="center-of-screen">

@@ -23,7 +23,7 @@ ChartJS.register(
 
 const Graph = ({graphData}) => {
     return (
-        <div>
+        <div className="graph">
             <Line
                 data={
                     {
@@ -31,8 +31,8 @@ const Graph = ({graphData}) => {
                         datasets : [
                             {
                                 data: graphData.map(i=> i[1]),
-                                label: 'wpm',
-                                borderColor: 'red'
+                                label: 'WPM',
+                                borderColor: '#F3E03B'
                             }
                         ]
                     }

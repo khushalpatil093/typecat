@@ -7,8 +7,8 @@ export const GlobalStyles = createGlobalStyle`
 }
 
 body{
-    background : #081426;
-    color: #745D54;
+    background : #07737A;
+    color: #F3E03B;
     margin: 0;
     padding: 0;
     transition: all 0.25s linear;
@@ -38,12 +38,12 @@ body{
 .ResetBtn{
     background: transparent;
     font-size: 1rem;
-    color: #745D54;
+    color: #F3E03B;
     border: none;
     padding: 0.2rem 0.7rem;
 }
 .ResetBtn:hover{
-    color: #745D54;
+    color: #FFFFFF;
     cursor: pointer;
 }
 
@@ -51,7 +51,7 @@ body{
     font-size: 32px;
     display: flex;
     flex-wrap: wrap;
-    color: #745D54;
+    color: #F3E03B;
 }
 
 .word{
@@ -108,7 +108,7 @@ body{
 }
 
 .time-mode:hover{
-    color: green;
+    color: white;
     cursor: pointer;
 }
 
@@ -118,16 +118,6 @@ body{
     justify-content: space-between;
     margin-left: auto;
     margin-right: auto;
-}
-
-.light-theme{
-    background-color: #fff;
-    color: #000;
-}
-
-.dark-theme {
-    background-color: #333;
-    color: #fff;
 }
 .header{
     width: 1000px;
@@ -139,11 +129,13 @@ body{
 .logo {
     display: flex;
     justify-content: center;
-    align-item: center;
+    align-items: center;
+    gap: 1rem;
 }
 .headName{
     font-size: 2rem;
     font-weight: 800;
+    color: #FFFFFF;
 }
 
 .stats-box{
@@ -164,11 +156,14 @@ body{
 }
 
 .title{
-    font-size: 20px;
+    font-size: 2.5rem;
+    text-align: left;
 }
 
 .subtitle{
-    font-size: 30px;
+    font-size: 2rem;
+    text-align: left;
+    color: #FFFFFF;
 }
 
 .user-profile{
